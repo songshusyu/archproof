@@ -1,0 +1,33 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate skill frontmatter and scripts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          skill = Path("skills/archproof-audit/SKILL.md")
+          text = skill.read_text(encoding="utf-8")
+          if not text.startswith("---\n"):
+              raise SystemExit("SKILL.md must start with YAML frontmatter")
+          fm = text.split("---", 2)[1]
+          if "name: archproof-audit" not in fm:
+              raise SystemExit("missing skill name")
+          if "description:" not in fm:
+              raise SystemExit("missing skill description")
+          for forbidden in ["api_key", "password", "secret", "sk-"]:
+              if re.search(forbidden, text, re.I):
+                  raise SystemExit(f"possible secret marker in SKILL.md: {forbidden}")
+          PY
+          python skills/archproof-audit/scripts/test_collect_architecture_evidence.py

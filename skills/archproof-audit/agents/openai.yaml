@@ -1,0 +1,4 @@
+interface:
+  display_name: "ArchProof 架构证据审计"
+  short_description: "核对架构结论、源码实现、运行证据与故障恢复的一致性"
+  default_prompt: "Use $archproof-audit to audit this project's architecture claims and produce an evidence-backed repair plan."
