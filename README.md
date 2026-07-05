@@ -1,5 +1,7 @@
 # ArchProof
 
+> Project: **ArchProof**. Installable skill: `archproof-audit`.
+
 ArchProof is a Codex/Agent skill for auditing architecture claims against real repository and runtime evidence.
 
 It is designed for backend, distributed, event-driven, real-time, and AI-enabled systems where a report or design document must be traceable to code, configuration, database constraints, Redis keys, MQ queues, automated tests, logs, and reproducible deployment evidence.
@@ -53,10 +55,18 @@ Or keep the skill in a project-local agent directory if your agent runtime suppo
 
 ## Validate
 
-```powershell
-python C:\Users\xuhes\.codex\skills\.system\skill-creator\scripts\quick_validate.py `
-  skills\archproof-audit
+If you have the Codex skill creator validator installed, run:
 
+```powershell
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" `
+  skills\archproof-audit
+```
+
+Portable checks that do not depend on a local Codex installation:
+
+```powershell
+python -m py_compile skills\archproof-audit\scripts\collect_architecture_evidence.py
+python -m py_compile skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 python skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 ```
 
@@ -76,6 +86,8 @@ Ask your agent:
 > Use ArchProof to audit whether this project’s architecture report is supported by code, Redis/MQ configuration, database constraints, tests, and runtime evidence. Produce a traceability matrix and prioritized defects.
 
 ArchProof does not try to prove architecture by dependency names alone. It asks whether business invariants, failure paths, identity boundaries, and reproducibility claims are backed by evidence.
+
+See [examples/](examples/) for a small sample scanner output.
 
 ## Scope
 

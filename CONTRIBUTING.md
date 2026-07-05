@@ -13,9 +13,11 @@ Thanks for improving ArchProof.
 ## Local checks
 
 ```powershell
-python C:\Users\xuhes\.codex\skills\.system\skill-creator\scripts\quick_validate.py `
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" `
   skills\archproof-audit
 
+python -m py_compile skills\archproof-audit\scripts\collect_architecture_evidence.py
+python -m py_compile skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 python skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 ```
 

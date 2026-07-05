@@ -1,5 +1,7 @@
 # ArchProof 架构证据审计 Skill
 
+> 项目名：**ArchProof**。可安装 Skill 名：`archproof-audit`。
+
 ArchProof 是一个面向 Codex/Agent 的可复用 Skill，用来审计“架构报告里的说法”是否真的能追溯到源码、配置、数据库约束、Redis Key、MQ 队列、自动化测试、日志和可复现部署证据。
 
 它最初来自一个 Web 后端课程项目中的反复检查流程，但已经抽象成通用工具：课程项目只是第一个使用场景，不是绑定场景。
@@ -38,10 +40,18 @@ Copy-Item -Recurse -Force ".\archproof\skills\archproof-audit" "$env:USERPROFILE
 
 ## 验证
 
-```powershell
-python C:\Users\xuhes\.codex\skills\.system\skill-creator\scripts\quick_validate.py `
-  skills\archproof-audit
+如果本机安装了 Codex skill creator 校验器，可以运行：
 
+```powershell
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" `
+  skills\archproof-audit
+```
+
+不依赖本机 Codex 安装的通用检查：
+
+```powershell
+python -m py_compile skills\archproof-audit\scripts\collect_architecture_evidence.py
+python -m py_compile skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 python skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 ```
 
@@ -50,6 +60,8 @@ python skills\archproof-audit\scripts\test_collect_architecture_evidence.py
 可以直接让 Agent 执行：
 
 > 使用 ArchProof 检查这个后端项目的架构报告是否有代码、Redis/MQ、数据库约束、测试和运行证据支撑，并输出追踪矩阵与缺陷清单。
+
+仓库的 [examples/](examples/) 目录提供了一个小型扫描输出示例。
 
 ## 边界
 

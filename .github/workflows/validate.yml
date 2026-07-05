@@ -17,6 +17,18 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import re
+
+          critical_files = {
+              "skills/archproof-audit/SKILL.md": 20,
+              "skills/archproof-audit/scripts/collect_architecture_evidence.py": 50,
+              "skills/archproof-audit/scripts/test_collect_architecture_evidence.py": 20,
+              ".github/workflows/validate.yml": 20,
+          }
+          for file_name, minimum_lines in critical_files.items():
+              line_count = len(Path(file_name).read_text(encoding="utf-8").splitlines())
+              if line_count < minimum_lines:
+                  raise SystemExit(f"{file_name} appears truncated or line-break damaged: {line_count} lines")
+
           skill = Path("skills/archproof-audit/SKILL.md")
           text = skill.read_text(encoding="utf-8")
           if not text.startswith("---\n"):
@@ -35,4 +47,6 @@ jobs:
               if re.search(pattern, text, re.I):
                   raise SystemExit(f"possible secret marker in SKILL.md: {pattern}")
           PY
+          python -m py_compile skills/archproof-audit/scripts/collect_architecture_evidence.py
+          python -m py_compile skills/archproof-audit/scripts/test_collect_architecture_evidence.py
           python skills/archproof-audit/scripts/test_collect_architecture_evidence.py
