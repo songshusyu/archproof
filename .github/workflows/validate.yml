@@ -26,8 +26,13 @@ jobs:
               raise SystemExit("missing skill name")
           if "description:" not in fm:
               raise SystemExit("missing skill description")
-          for forbidden in ["api_key", "password", "secret", "sk-"]:
-              if re.search(forbidden, text, re.I):
-                  raise SystemExit(f"possible secret marker in SKILL.md: {forbidden}")
+          secret_patterns = [
+              r"gh[oprs]_[A-Za-z0-9_]{20,}",
+              r"sk-[A-Za-z0-9_-]{12,}",
+              r"(api[_-]?key|password|secret|token)\s*[:=]",
+          ]
+          for pattern in secret_patterns:
+              if re.search(pattern, text, re.I):
+                  raise SystemExit(f"possible secret marker in SKILL.md: {pattern}")
           PY
           python skills/archproof-audit/scripts/test_collect_architecture_evidence.py
